@@ -19,17 +19,23 @@ module "bamboo" {
   efs                  = module.base-infrastructure.efs
   ingress              = module.base-infrastructure.ingress
   share_home_size      = "5Gi"
-  db_allocated_storage = var.db_allocated_storage
-  db_instance_class    = var.db_instance_class
-  db_iops              = var.db_iops
+
+  database_info = {
+    allocated_storage = var.db_allocated_storage
+    instance_class = var.db_instance_class
+    iops = var.db_iops
+  }
+
 
   license     = var.bamboo_license
   dataset_url = var.dataset_url
 
-  admin_username      = var.bamboo_admin_username
-  admin_password      = var.bamboo_admin_password
-  admin_display_name  = var.bamboo_admin_display_name
-  admin_email_address = var.bamboo_admin_email_address
+  bamboo_admin_info = {
+    username      = var.bamboo_admin_username
+    password      = var.bamboo_admin_password
+    display_name  = var.bamboo_admin_display_name
+    email_address = var.bamboo_admin_email_address
+  }
 
   bamboo_configuration = {
     "helm_version" = var.bamboo_helm_chart_version

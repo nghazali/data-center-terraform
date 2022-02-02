@@ -62,9 +62,9 @@ module "database" {
 
   product           = local.product_name
   rds_instance_id   = local.rds_instance_name
-  allocated_storage = var.db_allocated_storage
+  allocated_storage = var.bamboo_database_info["allocated_storage"]
   eks               = var.eks
-  instance_class    = var.db_instance_class
-  iops              = var.db_iops
+  instance_class    = var.bamboo_database_info["instance_class"]
+  iops              = var.bamboo_database_info["iops"]
   vpc               = var.vpc
 }

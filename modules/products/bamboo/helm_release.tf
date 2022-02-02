@@ -26,7 +26,7 @@ resource "helm_release" "bamboo" {
         }
       }
       database = {
-        type = "postgresql"
+        type = var.bamboo_database_type
         url  = module.database.rds_jdbc_connection
         credentials = {
           secretName = kubernetes_secret.rds_secret.metadata[0].name
@@ -65,7 +65,7 @@ data "kubernetes_service" "bamboo" {
 }
 
 resource "helm_release" "bamboo_agent" {
-  name       = "${local.product_name}-agent"
+  name       = local.agent_name
   namespace  = kubernetes_namespace.bamboo.metadata[0].name
   repository = local.helm_chart_repository
   chart      = local.agent_helm_chart_name
