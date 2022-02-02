@@ -37,51 +37,30 @@ variable "share_home_size" {
   type        = string
 }
 
-variable "db_allocated_storage" {
-  description = "Allocated storage for database instance in GiB."
-  type        = number
-}
-
-variable "db_instance_class" {
-  description = "Instance class of the RDS instance."
-  type        = string
-}
-
-variable "db_iops" {
-  description = "The requested number of I/O operations per second that the DB instance can support."
-  type        = number
-}
-
 variable "license" {
   description = "Bamboo license."
   type        = string
   sensitive   = true
 }
 
-variable "admin_username" {
-  description = "System administrator username."
-  type        = string
+variable "bamboo_admin_info" {
+  description = "Admin information for the Bamboo software"
+  type        = map(any)
+  validation {
+    condition = (length(var.bamboo_configuration) == 4 &&
+    alltrue([for o in keys(var.bamboo_configuration) : contains(["username", "password", "display_name", "email_address"], o)]))
+    error_message = "Bamboo admin information is not valid."
+  }
 }
 
-variable "admin_password" {
-  description = "System administrator password."
-  type        = string
-  sensitive   = true
-}
-
-variable "admin_display_name" {
-  description = "System administrator display name."
-  type        = string
-}
-
-variable "admin_email_address" {
-  description = "System administrator email address."
-  type        = string
-}
-
-variable "dataset_url" {
-  description = "URL of the dataset to restore in the Bamboo instance"
-  type        = string
+variable "bamboo_database_info" {
+  description = "Database information for the Bamboo software"
+  type        = map(any)
+  validation {
+    condition = (length(var.bamboo_configuration) == 3 &&
+    alltrue([for o in keys(var.bamboo_configuration) : contains(["allocated_storage", "instance_class", "iops"], o)]))
+    error_message = "Bamboo database information is not valid."
+  }
 }
 
 variable "bamboo_configuration" {
@@ -90,7 +69,7 @@ variable "bamboo_configuration" {
   validation {
     condition = (length(var.bamboo_configuration) == 5 &&
     alltrue([for o in keys(var.bamboo_configuration) : contains(["helm_version", "cpu", "mem", "min_heap", "max_heap"], o)]))
-    error_message = "Bamboo configuration is not valid1."
+    error_message = "Bamboo configuration is not valid."
   }
 }
 
@@ -102,6 +81,17 @@ variable "bamboo_agent_configuration" {
     alltrue([for o in keys(var.bamboo_agent_configuration) : contains(["helm_version", "cpu", "mem", "agent_count"], o)]))
     error_message = "Bamboo Agent configuration is not valid."
   }
+}
+
+variable "bamboo_database_type" {
+  description = "Type of the database for Bamboo"
+  type = string
+  default = "postgresql"
+}
+
+variable "dataset_url" {
+  description = "URL of the dataset to restore in the Bamboo instance"
+  type        = string
 }
 
 variable "bamboo_internal_use" {

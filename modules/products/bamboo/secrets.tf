@@ -37,10 +37,10 @@ resource "kubernetes_secret" "admin_secret" {
   }
 
   data = {
-    username     = var.admin_username
-    password     = var.admin_password
-    displayName  = var.admin_display_name
-    emailAddress = var.admin_email_address
+    username     = var.bamboo_admin_info["username"]
+    password     = var.bamboo_admin_info["password"]
+    displayName  = var.bamboo_admin_info["display_name"]
+    emailAddress = var.bamboo_admin_info["email_address"]
   }
 }
 
